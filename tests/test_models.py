@@ -164,3 +164,16 @@ class TestProductModel(unittest.TestCase):
         fproducts = Product.all()
         self.assertEqual(len(fproducts), 0)
 
+    def test_list_all_products(self):
+        """It should List all Products in the database"""
+        products = Product.all()
+        # Assert if the products list is empty, indicating that there are no products in the database at the beginning of the test case.
+        self.assertEqual(products, [])
+        # Use for loop to create five Product objects using a ProductFactory() and call the create() method on each product to save them to the database.
+        for i in range(5):
+            p = ProductFactory()
+            p.create()
+        # Fetch all products from the database again using product.all()
+        products = Product.all()
+        # Assert if the length of the products list is equal to 5, to verify that the five products created in the previous step have been successfully added to the database.
+        self.assertEqual(len(products), 5)
