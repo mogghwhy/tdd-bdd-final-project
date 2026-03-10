@@ -235,7 +235,7 @@ class TestProductRoutes(TestCase):
     def test_delete_product(self):
         """It should Delete a Product"""
 
-        # create a list products containing 5 products using the _create_products() method. 
+        # create a list products containing 5 products using the _create_products() method.
         products = self._create_products(5)
         # call the self.get_product_count() method to retrieve the initial count of products before any deletion
         initial_count = self.get_product_count()
@@ -250,9 +250,32 @@ class TestProductRoutes(TestCase):
         data = response.get_json()
         self.assertEqual(data, None)
         # send a self.client.get request to the same endpoint that was deleted to retrieve the deteled product
+        response = self.client.get(f"{BASE_URL}/{pid}")
         # assert that the resp.status_code is status.HTTP_404_NOT_FOUND to confirm deletion of the product
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         # retrieve the count of products after the deletion operation
+        new_count = self.get_product_count()
         # check if the new count of products is one less than the initial count
+        self.assertEqual(initial_count-1, new_count)
+
+    def test_attempt_delete_notexistent_product(self):
+        """It should Not Delete a Product that does not exist"""
+
+        
+;,                    count = self.get_pr oduc
+0        t_count()
+        # assign the first product from the products list to the variable test_product
+        # send a self.client.delete() request to the BASE_URL with test_product.id
+        pid = 0
+        response = self.client.delete(f"{BASE_URL}/{pid}")
+        # assert that the resp.status_code is status.HTTP_404_NOT_FOUND
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        data = response.get_json()
+        self.assertIn("was not found", data["message"])
+        # retrieve the count of products after the deletion operation
+        new_count = self.get_product_count()
+        # check if the new count of products is one less than the initial count
+        self.assertEqual(initial_count, new_count)
 
     ######################################################################
     # Utility functions

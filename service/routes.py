@@ -113,9 +113,10 @@ def list_products():
     for product in products:
         message = product.serialize()
         messages.append(message)
-# messages#########HTTP_200_OK# R E A D   A   P R O D U C T
-######################################################################
 
+    return jsonify(messages), status.HTTP_200_OK
+
+######################################################################
 #
 # PLACE YOUR CODE HERE TO READ A PRODUCT
 #
@@ -182,19 +183,14 @@ def update_products(product_id):
 def delete_products(product_id):
     """
 #     Delete a Product
-# 
 #     This endpoint will delete a Product
 #     """
     app.logger.info("Request to Delete a product with id [%s]", product_id)
 #
-#     product = Product.find(product_id)
-#     if not product:
-    abort(status.HTTP_404_NOT_FOUND,
-          f"Product with id '{product_id}' was not found.")
-#     pid = product.id
-#     product.delete()
-#     app.logger.info("Product with id [%s] deleted!", pid)
-#
-#     location_url = url_for("delete_products", product_id=pid, _external=True)
-#     return jsonify(""), status.HTTP_204_NO_CONTENT, {"Loc    """"
-#
+    product = Product.find(product_id)
+    if not product:
+        abort(status.HTTP_404_NOT_FOUND, f"Product with id '{product_id}' was not found.")
+    pid = product.id
+    product.delete()
+    app.logger.info("Product with id [%s] deleted!", pid)
+    return "", status.HTTP_204_NO_CONTENT
