@@ -116,9 +116,11 @@ def get_products(product_id):
     Reads a Product
     This endpoint will read a Product
     """
-    app.logger.info("Request to Read a Product...")    
+    app.logger.info("Request to Retrieve a product with id [%s]", product_id)
 
     product = Product().find(product_id)
+    if product is None:
+        abort(status.HTTP_404_NOT_FOUND, {"message": "the product was not found"})
     message = product.serialize()
 
     location_url = url_for("get_products", product_id=product.id, _external=True)    
