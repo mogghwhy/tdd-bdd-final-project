@@ -58,7 +58,8 @@ def check_content_type(content_type):
     if request.headers["Content-Type"] == content_type:
         return
 
-    app.logger.error("Invalid Content-Type: %s", request.headers["Content-Type"])
+    app.logger.error("Invalid Content-Type: %s",
+                     request.headers["Content-Type"])
     abort(
         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
         f"Content-Type must be {content_type}",
@@ -86,7 +87,8 @@ def create_products():
 
     message = product.serialize()
 
-    location_url = url_for("get_products", product_id=product.id, _external=True)
+    location_url = url_for(
+        "get_products", product_id=product.id, _external=True)
     return jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
 
 
@@ -98,13 +100,26 @@ def create_products():
 # PLACE YOUR CODE TO LIST ALL PRODUCTS HERE
 #
 
-######################################################################
-# R E A D   A   P R O D U C T
+@app.route("/products", methods=["GET"])
+def list_products():
+    """
+    Lists all Products
+    This endpoint will list all Products
+    """
+    app.logger.info("Request to List all Products...")
+
+    products = Product().all()
+    messages = []
+    for product in products:
+        message = product.serialize()
+        messages.append(message)
+# messages#########HTTP_200_OK# R E A D   A   P R O D U C T
 ######################################################################
 
 #
 # PLACE YOUR CODE HERE TO READ A PRODUCT
 #
+
 
 @app.route("/products/<product_id>", methods=["GET"])
 def get_products(product_id):
@@ -116,10 +131,12 @@ def get_products(product_id):
 
     product = Product().find(product_id)
     if product is None:
-        abort(status.HTTP_404_NOT_FOUND, {"message": "the product was not found"})
+        abort(status.HTTP_404_NOT_FOUND, {
+              "message": "the product was not found"})
     message = product.serialize()
 
-    location_url = url_for("get_products", product_id=product.id, _external=True)
+    location_url = url_for(
+        "get_products", product_id=product.id, _external=True)
     return jsonify(message), status.HTTP_200_OK, {"Location": location_url}
 
 ######################################################################
@@ -139,16 +156,17 @@ def update_products(product_id):
 
     product = Product.find(product_id)
     if not product:
-        abort(status.HTTP_404_NOT_FOUND, f"Product with id '{product_id}' was not found.")
+        abort(status.HTTP_404_NOT_FOUND,
+              f"Product with id '{product_id}' was not found.")
     data = request.get_json()
     product.deserialize(data)
     product.id = product_id
     product.update()
     app.logger.info("Product with id [%s] updated!", product.id)
-
     message = product.serialize()
 
-    location_url = url_for("get_products", product_id=product.id, _external=True)
+    location_url = url_for(
+        "update_products", product_id=product.id, _external=True)
     return jsonify(message), status.HTTP_200_OK, {"Location": location_url}
 
 ######################################################################
@@ -158,4 +176,25 @@ def update_products(product_id):
 
 #
 # PLACE YOUR CODE TO DELETE A PRODUCT HERE
+#
+
+@app.route("/products/<int:product_id>", methods=["DELETE"])
+def delete_products(product_id):
+    """
+#     Delete a Product
+# 
+#     This endpoint will delete a Product
+#     """
+    app.logger.info("Request to Delete a product with id [%s]", product_id)
+#
+#     product = Product.find(product_id)
+#     if not product:
+    abort(status.HTTP_404_NOT_FOUND,
+          f"Product with id '{product_id}' was not found.")
+#     pid = product.id
+#     product.delete()
+#     app.logger.info("Product with id [%s] deleted!", pid)
+#
+#     location_url = url_for("delete_products", product_id=pid, _external=True)
+#     return jsonify(""), status.HTTP_204_NO_CONTENT, {"Loc    """"
 #
