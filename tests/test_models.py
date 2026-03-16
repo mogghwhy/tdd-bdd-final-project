@@ -135,6 +135,18 @@ class TestProductModel(unittest.TestCase):
         the_exception = cm.exception
         self.assertEqual(str(the_exception), "Update called with empty ID field")
 
+    def test_deserialize_with_bad_available_value(self):
+        """It should not  throw an exception when bad value for available field used"""
+        product = ProductFactory()
+        product.id = None
+        product.create()
+        bad_data = product.serialize()
+        bad_data['available'] = {'d': True}
+        with self.assertRaises(DataValidationError) as cm:
+            product.deserialize(bad_data)
+        the_exception = cm.exception
+        self.assertIn("Invalid type for boolean [available]:", str(the_exception))
+
     def test_update_a_product(self):
         """It should Update a Product"""
         product = ProductFactory()
