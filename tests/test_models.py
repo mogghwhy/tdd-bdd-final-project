@@ -130,8 +130,10 @@ class TestProductModel(unittest.TestCase):
         pid = product.id
         newdescription = "new description"
         product.description = newdescription
-        with self.assertRaises(DataValidationError):
+        with self.assertRaises(DataValidationError) as cm:
             product.update()
+        the_exception = cm.exception
+        self.assertEqual(str(the_exception), "Update called with empty ID field")
 
     def test_update_a_product(self):
         """It should Update a Product"""
