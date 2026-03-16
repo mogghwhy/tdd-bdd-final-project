@@ -158,6 +158,14 @@ class TestProductModel(unittest.TestCase):
         the_exception = context_manager.exception
         self.assertIn("Invalid attribute:", str(the_exception))
 
+    def test_deserialize_with_missing_data(self):
+        """It should throw an exception when there is bad data"""
+        product = ProductFactory()
+        with self.assertRaises(DataValidationError) as context_manager:
+            product.deserialize(None)
+        the_exception = context_manager.exception
+        self.assertIn("Invalid product: body of request contained bad or no data", str(the_exception))
+
     def test_update_a_product(self):
         """It should Update a Product"""
         product = ProductFactory()
