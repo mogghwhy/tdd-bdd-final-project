@@ -135,7 +135,7 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(str(the_exception), "Update called with empty ID field")
 
     def test_deserialize_with_bad_available_value(self):
-        """It should not  throw an exception when bad value for available field used"""
+        """It should throw an exception when bad value for available field used"""
         product = ProductFactory()
         product.id = None
         product.create()
