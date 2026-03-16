@@ -127,7 +127,6 @@ class TestProductModel(unittest.TestCase):
         """It should not Update a Product with an empty id field"""
         product = ProductFactory()
         product.id = None
-        pid = product.id
         newdescription = "new description"
         product.description = newdescription
         with self.assertRaises(DataValidationError) as cm:
